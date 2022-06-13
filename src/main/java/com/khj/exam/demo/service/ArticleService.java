@@ -1,9 +1,7 @@
 package com.khj.exam.demo.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.khj.exam.demo.reporsitory.ArticleRepository;
@@ -17,8 +15,9 @@ public class ArticleService {
 		this.articleRepository = articleRepository;
 	}
 
-	public Article writeArticle(String title, String body) {
-		return articleRepository.writeArticle(title, body);
+	public int writeArticle(String title, String body) {
+		articleRepository.writeArticle(title, body);
+		return articleRepository.getLastInsertId();
 	}
 
 	public List<Article> getArticles() {
