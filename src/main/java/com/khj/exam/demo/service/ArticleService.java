@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.khj.exam.demo.reporsitory.ArticleRepository;
-import com.khj.exam.vo.Article;
+import com.khj.exam.demo.repository.ArticleRepository;
+import com.khj.exam.demo.vo.Article;
 
 @Service
 public class ArticleService {
