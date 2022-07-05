@@ -12,4 +12,8 @@ spring:
      username: korad
      password: kor123414
 mybatis:
-  type-aliases-package: com.khj.exam.demo.vo
+  type-aliases-package: com.sbs.exam.demo.vo
+custom:
+  logging:
+    dir: log
+    level: debug 
