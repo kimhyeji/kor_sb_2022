@@ -61,10 +61,12 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(Model model, int id) {		
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+		
 		model.addAttribute("article", article);
 
-		boolean actorCanMackReactionPoint =  reactionPointService.actorCanMackReactionPoint(rq.getLoginedMemberId(), "article",id);
-		model.addAttribute("actorCanMackReactionPoint", actorCanMackReactionPoint);
+		boolean actorCanMakeReactionPoint =  reactionPointService.actorCanMakeReactionPoint(rq.getLoginedMemberId(), "article", id);
+		
+		model.addAttribute("actorCanMakeReactionPoint", actorCanMakeReactionPoint);
 
 		return "usr/article/detail";
 	}
