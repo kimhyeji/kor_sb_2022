@@ -36,6 +36,7 @@
 </script>
 
 <script>
+	// 댓글작성 관련
 	let ReplyWrite__submitFormDone = false;
 	function ReplyWrite__submitForm(form) {
 		if (ReplyWrite__submitFormDone) {
@@ -155,6 +156,9 @@
           </colgroup>
           <tbody>
             <tr>
+              <th>relId</th>
+              <td>${article.id}</td>
+            </tr>
             <tr>
               <th>작성자</th>
               <td>${rq.loginedMember.nickname}</td>
@@ -178,6 +182,12 @@
     <c:if test="${rq.notLogined}">
       <a class="btn btn-link" href="/usr/member/login">로그인</a>후 이용해주세요.
     </c:if>
+  </div>
+</section>
+
+<section class="mt-5">
+  <div class="container mx-auto px-3">
+    <h1>댓글 리스트(${repliesCount})</h1>
   </div>
 </section>
 
