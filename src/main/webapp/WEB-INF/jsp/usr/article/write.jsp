@@ -57,7 +57,7 @@
           </tr>
         </tbody>
       </table>
-      </from>
+     </form>
   </div>
 </section>
 
