@@ -85,8 +85,8 @@ function ArticleDetail__increaseHitCout() {
                   </a>
                 </c:if>
                 
-                <c:if test="${actorCanCencelGoodReaction}">
-                  <a href="/usr/reactionPoint/doCencelGoodReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}" class="btn btn-xs  btn-primary">
+                <c:if test="${actorCanCancleGoodReaction}">
+                  <a href="/usr/reactionPoint/doCancleGoodReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}" class="btn btn-xs  btn-primary">
                     좋아요 👍
                   </a>
                   <span>&nbsp;</span>
@@ -95,12 +95,12 @@ function ArticleDetail__increaseHitCout() {
                   </a>
                 </c:if>
                 
-                <c:if test="${actorCanCencelBadReaction}">
+                <c:if test="${actorCanCancleBadReaction}">
                   <a onclick="alert(this.title); return false;" href="#" title="먼저 싫어요를 취소해주세요." class="btn btn-xs  btn-primary  btn-outline">
                     좋아요 👍
                   </a>
                   <span>&nbsp;</span>
-                  <a href="/usr/reactionPoint/doCencelBadReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}" class="btn btn-xs  btn-secondary">
+                  <a href="/usr/reactionPoint/doCancleBadReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}" class="btn btn-xs  btn-secondary">
                     싫어요 👎
                   </a>
                 </c:if>
