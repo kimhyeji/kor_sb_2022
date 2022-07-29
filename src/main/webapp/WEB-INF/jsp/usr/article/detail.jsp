@@ -35,6 +35,33 @@
 	})
 </script>
 
+<script>
+	let ReplyWrite__submitFormDone = false;
+	function ReplyWrite__submitForm(form) {
+		if (ReplyWrite__submitFormDone) {
+			return;
+		}
+
+		// 좌우공백 제거
+		form.body.value = form.body.value.trim();
+
+		if (form.body.value.length == 0) {
+			alert('댓글을 입력해주세요.');
+			form.body.focus();
+			return;
+		}
+
+		if (form.body.value.length < 2) {
+			alert('댓글을 2자 이상 입력해주세요.');
+			form.body.focus();
+			return;
+		}
+
+		ReplyWrite__submitFormDone = true;
+		form.submit();
+	}
+</script>
+
 <section class="mt-5">
   <div class="container mx-auto px-3">
     <div class="table-box-type-1">
@@ -78,16 +105,16 @@
                   <a href="/usr/reactionPoint/doBadReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}" class="btn btn-xs  btn-secondary btn-outline"> 싫어요 👎 </a>
                 </c:if>
 
-                <c:if test="${actorCanCancleGoodReaction}">
-                  <a href="/usr/reactionPoint/doCancleGoodReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}" class="btn btn-xs  btn-primary"> 좋아요 👍 </a>
+                <c:if test="${actorCanCancelGoodReaction}">
+                  <a href="/usr/reactionPoint/doCancelGoodReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}" class="btn btn-xs  btn-primary"> 좋아요 👍 </a>
                   <span>&nbsp;</span>
                   <a onclick="alert(this.title); return false;" href="#" title="먼저 좋아요를 취소해주세요." class="btn btn-xs  btn-secondary btn-outline"> 싫어요 👎 </a>
                 </c:if>
 
-                <c:if test="${actorCanCancleBadReaction}">
+                <c:if test="${actorCanCancelBadReaction}">
                   <a onclick="alert(this.title); return false;" href="#" title="먼저 싫어요를 취소해주세요." class="btn btn-xs  btn-primary  btn-outline"> 좋아요 👍 </a>
                   <span>&nbsp;</span>
-                  <a href="/usr/reactionPoint/doCancleBadReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}" class="btn btn-xs  btn-secondary"> 싫어요 👎 </a>
+                  <a href="/usr/reactionPoint/doCancelBadReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}" class="btn btn-xs  btn-secondary"> 싫어요 👎 </a>
                 </c:if>
               </div>
             </td>
@@ -119,7 +146,7 @@
   <div class="container mx-auto px-3">
     <h1>댓글 작성</h1>
     <c:if test="${rq.logined}">
-      <form class="table-box-type-1" method="POST" action="../reply/doWrite">
+      <form class="table-box-type-1" method="POST" action="../reply/doWrite" onsubmit="ReplyWrite__submitForm(this); return false;">
         <input type="hidden" name="relTypeCode" value="article" />
         <input type="hidden" name="relId" value="${article.id}" />
         <table>
@@ -135,7 +162,7 @@
             <tr>
               <th>내용</th>
               <td>
-                <textarea required="required" name="body" rows="5" placeholder="내용"></textarea>
+                <textarea name="body" rows="5" placeholder="내용"></textarea>
               </td>
             </tr>
             <tr>
