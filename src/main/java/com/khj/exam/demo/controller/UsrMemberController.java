@@ -129,5 +129,10 @@ public class UsrMemberController {
 		
 		return rq.jsReplace("", replaceUri);
 	}
+	
+	@RequestMapping("/usr/member/modify")
+	public String showModify() {
+		return "usr/member/modify";
+	}
 }
 
