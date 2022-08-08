@@ -1,6 +1,9 @@
 package com.khj.exam.demo.vo;
 
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -122,5 +125,15 @@ public class Rq {
 		resp.setContentType("text/html; charset=UTF-8");
 		print(Ut.jsReplace(msg, uri));
 	}
+	
+	public String getLoginUri() {
+		return "../member/login?afterLoginUri=" + getAfterLoginUri();
+	}
+
+	public String getAfterLoginUri() {
+		return getEncodedCurrentUri();
+	}
+	
+	
 
 }
