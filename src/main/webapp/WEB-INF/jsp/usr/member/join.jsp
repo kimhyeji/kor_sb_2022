@@ -7,12 +7,13 @@
 
 <script>
 	let submitJoinFormDone = false;
+	let validLogind = "";
 	function submitJoinForm(form) {
 		if (submitJoinFormDone) {
 			alert('처리중입니다.');
 			return;
 		}
-		
+
 		form.loginId.value = form.loginId.value.trim();
 
 		if (form.loginId.value.length == 0) {
@@ -21,6 +22,12 @@
 			return;
 		}
 		
+		if (form.loginId.value != validLogind) {
+			alert('해당 로그인아이디는 올바르지 않습니다. 다른 로그인아이디를 입력해주세요.');
+			form.loginId.focus();
+			return;
+		}
+
 		form.loginPw.value = form.loginPw.value.trim();
 
 		if (form.loginPw.value.length == 0) {
@@ -78,13 +85,36 @@
 		submitJoinFormDone = true;
 		form.submit();
 	}
+
+	function checkLoginIdDup(el) {
+		$('.loginId-message').empty();
+		const form = $(el).closest('form').get(0);
+		
+		if (form.loginId.value == 0) {
+			validLogind = '';
+			return;
+		}
+		
+		$.get( '../member/getLoginIdDup', {
+	      isAjax: 'Y',
+		  loginId: form.loginId.value,
+		}, function(data) {
+		  $('.loginId-message').html('<div class="mt-2">'+ data.msg +'</div>');
+		  if (data.success) {
+			  validLogind = data.data1;
+		  } else {
+			  validLogind = '';
+		  }
+		}, 'json');
+		
+	}
 </script>
 
 <section class="mt-5">
   <div class="container mx-auto px-3">
     <div class="table-box-type-1">
       <form class="table-box-type-1" method="POST" action="../member/doJoin" onsubmit="submitJoinForm(this); return false;">
-        <input type="hidden" name="afterJoinUri" value="${param.afterJoinUri}"/>
+        <input type="hidden" name="afterJoinUri" value="${param.afterJoinUri}" />
         <table>
           <colgroup>
             <col width="200" />
@@ -93,7 +123,8 @@
             <tr>
               <th>로그인아이디</th>
               <td>
-                <input class="input input-bordered" name="loginId" placeholder="로그인아이디" type="text" />
+                <input class="input input-bordered" name="loginId" placeholder="로그인아이디" type="text" onkeyup="checkLoginIdDup(this);" autocomplete="off"/>
+                <div class="loginId-message"></div>
               </td>
             </tr>
             <tr>
@@ -117,19 +148,19 @@
             <tr>
               <th>닉네임</th>
               <td>
-                <input class="input input-bordered" name="nickname" placeholder="닉네임" type="text"/>
+                <input class="input input-bordered" name="nickname" placeholder="닉네임" type="text" />
               </td>
             </tr>
             <tr>
               <th>이메일</th>
               <td>
-                <input class="input input-bordered" name="email" placeholder="이메일" type="text"/>
+                <input class="input input-bordered" name="email" placeholder="이메일" type="text" />
               </td>
             </tr>
             <tr>
               <th>휴대전화번호</th>
               <td>
-                <input class="input input-bordered" name="cellphoneNo" placeholder="휴대전화번호" type="text"/>
+                <input class="input input-bordered" name="cellphoneNo" placeholder="휴대전화번호" type="text" />
               </td>
             </tr>
             <tr>
