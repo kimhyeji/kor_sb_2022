@@ -5,7 +5,7 @@
 <c:set var="pageTitle" value="회원가입" />
 <%@ include file="../common/head.jspf"%>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js"></script>
 
 <script>
 	let submitJoinFormDone = false;
