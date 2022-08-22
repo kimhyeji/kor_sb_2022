@@ -96,10 +96,6 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
 	public String doLogin(String loginId, String loginPw, @RequestParam(defaultValue = "/") String afterLoginUri) {
-		if ( rq.isLogined() ) {
-			return rq.jsHistoryBack("이미 로그인되었습니다.");
-		}
-		
 		if ( Ut.empty(loginId) ) {
 			return rq.jsHistoryBack("loginId(을)를 입력해주세요.");
 		}
@@ -130,11 +126,7 @@ public class UsrMemberController {
 	
 	@RequestMapping("/usr/member/doFindLoginId")
 	@ResponseBody
-	public String doFindLoginId(String name, String email, @RequestParam(defaultValue = "/") String afterFindLoginIdUri) {
-		if ( rq.isLogined() ) {
-			return rq.jsHistoryBack("이미 로그인되었습니다.");
-		}
-		
+	public String doFindLogiId(String name, String email, @RequestParam(defaultValue = "/") String afterFindLoginIdUri) {
 		if ( Ut.empty(name) ) {
 			return rq.jsHistoryBack("name(을)를 입력해주세요.");
 		}
@@ -150,6 +142,37 @@ public class UsrMemberController {
 		}
 		
 		return rq.jsReplace(Ut.f("회원님의 아이디는 [%s]입니다.", member.getLoginId()), afterFindLoginIdUri);
+	}
+	
+	@RequestMapping("/usr/member/findLoginPw")
+	public String showFindLoginPw() {
+		return "usr/member/findLoginPw";
+	}
+	
+	@RequestMapping("/usr/member/doFindLoginPw")
+	@ResponseBody
+	public String doFindLoginPw(String loginId, String email, @RequestParam(defaultValue = "/") String afterFindLoginPwUri) {		
+		if ( Ut.empty(loginId) ) {
+			return rq.jsHistoryBack("loginId(을)를 입력해주세요.");
+		}
+		
+		if ( Ut.empty(email) ) {
+			return rq.jsHistoryBack("email(을)를 입력해주세요.");
+		}
+		
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		if ( member == null ) {
+			return rq.jsHistoryBack("일치하는 회원이 존재하지 않습니다.");
+		}
+		
+		if ( member.getEmail().equals(email) == false ) {
+			return rq.jsHistoryBack("일치하는 회원이 존재하지 않습니다.");
+		}
+		
+		ResultData notifyTempLoginPwByEmailRs = memberService.notifyTempLoginPwByEmail(member);
+		
+		return rq.jsReplace(notifyTempLoginPwByEmailRs.getMsg(), afterFindLoginPwUri);
 	}
 	
 	@RequestMapping("/usr/member/myPage")
