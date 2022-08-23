@@ -1,5 +1,9 @@
 package com.khj.exam.demo.vo;
 
+import java.util.Map;
+
+import com.khj.exam.demo.utill.Ut;
+
 import lombok.Getter;
 import lombok.ToString;
 
@@ -15,6 +19,14 @@ public class ResultData<DT> {
 	private DT data1;
 	@Getter
 	private Object data2;
+//	@Getter
+//	private static Map<String, Object> body = Ut.mapOf(Object);
+	
+	public ResultData(String resultCode, String msg, Object... args) {
+		this.resultCode = resultCode;
+		this.msg = msg;
+		this.body = Util.mapOf(args);
+	}
 	
 	public static ResultData from(String resultCode, String msg) {
 		return from(resultCode, msg, null, null);
@@ -45,5 +57,10 @@ public class ResultData<DT> {
 	public void setData2(String dataName, Object data) {
 		dataName = dataName;
 		data2 = data;		
+	}
+	
+	public static ResultData fromFile(String resultCode, String msg, Object... args) {
+		body = Ut.mapOf(args);
+		return fromFile(resultCode, msg, body);
 	}
 }
