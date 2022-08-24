@@ -4,28 +4,24 @@ import java.util.Map;
 
 import com.khj.exam.demo.utill.Ut;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
-@ToString
+@Data
 public class ResultData<DT> {
-	@Getter
 	private String resultCode;
-	@Getter
 	private String msg;
-	@Getter
 	private String data1Name;
-	@Getter
 	private DT data1;
-	@Getter
 	private Object data2;
-//	@Getter
-//	private static Map<String, Object> body = Ut.mapOf(Object);
+	private Map<String, Object> body;
+	
+	public ResultData() {
+	}
 	
 	public ResultData(String resultCode, String msg, Object... args) {
 		this.resultCode = resultCode;
 		this.msg = msg;
-		this.body = Util.mapOf(args);
+		this.body = Ut.mapOf(args);
 	}
 	
 	public static ResultData from(String resultCode, String msg) {
@@ -57,10 +53,5 @@ public class ResultData<DT> {
 	public void setData2(String dataName, Object data) {
 		dataName = dataName;
 		data2 = data;		
-	}
-	
-	public static ResultData fromFile(String resultCode, String msg, Object... args) {
-		body = Ut.mapOf(args);
-		return fromFile(resultCode, msg, body);
 	}
 }

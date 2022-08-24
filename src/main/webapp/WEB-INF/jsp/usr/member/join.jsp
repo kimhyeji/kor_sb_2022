@@ -169,7 +169,7 @@
             <tr>
               <th>프로필 이미지</th>
               <td>
-                <input name="profileImg" placeholder="프로필 이미지를 선택해주세요" type="file" />
+                <input name="file__member__0__extra__profileImg__1" placeholder="프로필 이미지를 선택해주세요" type="file" />
               </td>
             </tr>
             <tr>

@@ -22,8 +22,9 @@ public class UsrMemberController {
 	private GenFileService genFileService;
 	private Rq rq;
 	
-	public UsrMemberController(MemberService memberService, Rq rq) {
+	public UsrMemberController(MemberService memberService,GenFileService genFileService, Rq rq) {
 		this.memberService = memberService;
+		this.genFileService = genFileService;
 		this.rq = rq;
 	}
 	
@@ -58,11 +59,9 @@ public class UsrMemberController {
 		
 		if ( joinRd.isFail() ) {
 			return rq.jsHistoryBack(joinRd.getResultCode(), joinRd.getMsg());
-		}
+		}	
 		
-		
-		
-		int newMemberId = (int)joinRd..get("id");
+		int newMemberId = (int)joinRd.getBody().get("id");
 		
 		String afterJoinUri = "../member/login?afterLoginUri=" +  Ut.getUriEncoded(afterLoginUri);
 		

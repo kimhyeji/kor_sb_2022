@@ -39,7 +39,7 @@ public class GenFileService {
         genFileRepository.saveMeta(param);
 
         int id = Ut.getAsInt(param.get("id"), 0);
-        return ResultData.from("S-1", "성공하였습니다.", "id", id);
+        return new ResultData("S-1", "성공하였습니다.", "id", id);
     }
 
     public ResultData save(MultipartFile multipartFile, String relTypeCode, int relId, String typeCode, String type2Code, int fileNo) {
@@ -47,13 +47,13 @@ public class GenFileService {
         String[] fileInputNameBits = fileInputName.split("__");
 
         if (fileInputNameBits[0].equals("file") == false) {
-            return ResultData.from("F-1", "파라미터 명이 올바르지 않습니다.");
+            return new ResultData("F-1", "파라미터 명이 올바르지 않습니다.");
         }
 
         int fileSize = (int) multipartFile.getSize();
 
         if (fileSize <= 0) {
-            return ResultData.from("F-2", "파일이 업로드 되지 않았습니다.");
+            return new ResultData("F-2", "파일이 업로드 되지 않았습니다.");
         }
 
         String originFileName = multipartFile.getOriginalFilename();
@@ -97,10 +97,10 @@ public class GenFileService {
         try {
             multipartFile.transferTo(new File(targetFilePath));
         } catch (IllegalStateException | IOException e) {
-            return ResultData.from("F-3", "파일저장에 실패하였습니다.");
+            return new ResultData("F-3", "파일저장에 실패하였습니다.");
         }
 
-        return ResultData.from("S-1", "파일이 생성되었습니다.", "id", newGenFileId, "fileRealPath", targetFilePath, "fileName",
+        return new ResultData("S-1", "파일이 생성되었습니다.", "id", newGenFileId, "fileRealPath", targetFilePath, "fileName",
                 targetFileName, "fileInputName", fileInputName);
     }
 
@@ -180,12 +180,12 @@ public class GenFileService {
             }
         }
 
-        return ResultData.from("S-1", "파일을 업로드하였습니다.", "filesResultData", filesResultData, "genFileIdsStr",
+        return new ResultData("S-1", "파일을 업로드하였습니다.", "filesResultData", filesResultData, "genFileIdsStr",
                 genFileIdsStr, "deleteCount", deleteCount);
     }
 
     public void changeRelId(int id, int relId) {
-        genFileRepository.changeRelId(id, relId);
+    	genFileRepository.changeRelId(id, relId);
     }
 
     public void deleteGenFiles(String relTypeCode, int relId) {
