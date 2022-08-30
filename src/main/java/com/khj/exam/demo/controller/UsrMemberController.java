@@ -2,6 +2,8 @@ package com.khj.exam.demo.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +14,6 @@ import org.springframework.web.multipart.MultipartRequest;
 import com.khj.exam.demo.service.GenFileService;
 import com.khj.exam.demo.service.MemberService;
 import com.khj.exam.demo.utill.Ut;
-import com.khj.exam.demo.vo.Article;
 import com.khj.exam.demo.vo.Member;
 import com.khj.exam.demo.vo.ResultData;
 import com.khj.exam.demo.vo.Rq;
@@ -117,21 +118,15 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
 	public String doLogin(String loginId, String loginPw, @RequestParam(defaultValue = "/") String afterLoginUri) {
-		if (Ut.empty(loginId)) {
-			return rq.jsHistoryBack("loginId(을)를 입력해주세요.");
-		}
-
-		if (Ut.empty(loginPw)) {
-			return rq.jsHistoryBack("loginPw(을)를 입력해주세요.");
-		}
-
 		Member member = memberService.getMemberByLoginId(loginId);
+		
+		System.out.println("loginPw : " + loginPw);
 
 		if (member == null) {
 			return rq.jsHistoryBack("존재하지 않은 로그인아이디 입니다.");
 		}
 
-		if (member.getLoginPw().equals(Ut.sha256(loginPw)) == false) {
+		if (member.getLoginPw().equals(loginPw) == false) {
 			return rq.jsHistoryBack("비밀번호가 일치하지 않습니다.");
 		}
 
@@ -251,7 +246,7 @@ public class UsrMemberController {
 
 	@RequestMapping("/usr/member/doModify")
 	@ResponseBody
-	public String doModify(String memberModifyAuthKey, String loginPw, String name, String nickname, String email,
+	public String doModify(HttpServletRequest req, String memberModifyAuthKey, String loginPw, String name, String nickname, String email,
 			String cellphoneNo, MultipartRequest multipartRequest) {
 		if (Ut.empty(memberModifyAuthKey)) {
 			return rq.jsHistoryBack("memberModifyAuthKey(이)가 필요합니다.");
@@ -286,6 +281,12 @@ public class UsrMemberController {
 
 		ResultData modifyRd = memberService.modify(rq.getLoginedMemberId(), loginPw, name, nickname, email,
 				cellphoneNo);
+		
+		
+		if (req.getParameter("deleteFile__member__0__extra__profileImg__1") != null ) {
+			System.out.println("실행됨.");
+			genFileService.deleteGenFiles("member", rq.getLoginedMemberId(), "extra", "profileImg", 1);
+		}
 
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 
