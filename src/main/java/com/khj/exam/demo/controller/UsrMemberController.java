@@ -34,30 +34,7 @@ public class UsrMemberController {
 	@ResponseBody
 	public String doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNo, String email,
 			@RequestParam(defaultValue = "/") String afterLoginUri, MultipartRequest multipartRequest) {
-		if (Ut.empty(loginId)) {
-			return rq.jsHistoryBack("F-1", "loginId(을)를 입력해주세요.");
-		}
-
-		if (Ut.empty(loginPw)) {
-			return rq.jsHistoryBack("F-2", "loginPw(을)를 입력해주세요.");
-		}
-
-		if (Ut.empty(name)) {
-			return rq.jsHistoryBack("F-3", "name(을)를 입력해주세요.");
-		}
-
-		if (Ut.empty(nickname)) {
-			return rq.jsHistoryBack("F-4", "nickname(을)를 입력해주세요.");
-		}
-
-		if (Ut.empty(cellphoneNo)) {
-			return rq.jsHistoryBack("F-5", "cellphoneNo(을)를 입력해주세요.");
-		}
-
-		if (Ut.empty(email)) {
-			return rq.jsHistoryBack("F-6", "email(을)를 입력해주세요.");
-		}
-
+		System.out.println("loginPw : " +  loginPw);
 		ResultData<Integer> joinRd = memberService.join(loginId, loginPw, name, nickname, cellphoneNo, email);
 
 		if (joinRd.isFail()) {
@@ -119,8 +96,6 @@ public class UsrMemberController {
 	@ResponseBody
 	public String doLogin(String loginId, String loginPw, @RequestParam(defaultValue = "/") String afterLoginUri) {
 		Member member = memberService.getMemberByLoginId(loginId);
-		
-		System.out.println("loginPw : " + loginPw);
 
 		if (member == null) {
 			return rq.jsHistoryBack("존재하지 않은 로그인아이디 입니다.");
@@ -153,14 +128,6 @@ public class UsrMemberController {
 	@ResponseBody
 	public String doFindLogiId(String name, String email,
 			@RequestParam(defaultValue = "/") String afterFindLoginIdUri) {
-		if (Ut.empty(name)) {
-			return rq.jsHistoryBack("name(을)를 입력해주세요.");
-		}
-
-		if (Ut.empty(email)) {
-			return rq.jsHistoryBack("email(을)를 입력해주세요.");
-		}
-
 		Member member = memberService.getMemberByNameAndEmail(name, email);
 
 		if (member == null) {
@@ -179,14 +146,6 @@ public class UsrMemberController {
 	@ResponseBody
 	public String doFindLoginPw(String loginId, String email,
 			@RequestParam(defaultValue = "/") String afterFindLoginPwUri) {
-		if (Ut.empty(loginId)) {
-			return rq.jsHistoryBack("loginId(을)를 입력해주세요.");
-		}
-
-		if (Ut.empty(email)) {
-			return rq.jsHistoryBack("email(을)를 입력해주세요.");
-		}
-
 		Member member = memberService.getMemberByLoginId(loginId);
 
 		if (member == null) {
@@ -261,22 +220,6 @@ public class UsrMemberController {
 
 		if (Ut.empty(loginPw)) {
 			loginPw = null;
-		}
-
-		if (Ut.empty(name)) {
-			return rq.jsHistoryBack("이름(을) 입력해주세요.");
-		}
-
-		if (Ut.empty(nickname)) {
-			return rq.jsHistoryBack("닉네임(을) 입력해주세요.");
-		}
-
-		if (Ut.empty(email)) {
-			return rq.jsHistoryBack("이메일(을) 입력해주세요.");
-		}
-
-		if (Ut.empty(cellphoneNo)) {
-			return rq.jsHistoryBack("휴대전화번호(을) 입력해주세요.");
 		}
 
 		ResultData modifyRd = memberService.modify(rq.getLoginedMemberId(), loginPw, name, nickname, email,
