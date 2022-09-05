@@ -20,6 +20,8 @@ import lombok.Getter;
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Rq {
 	@Getter
+	private boolean isAjax;
+	@Getter
 	private boolean isLogined;
 	@Getter
 	private int loginedMemberId;
@@ -41,6 +43,7 @@ public class Rq {
 
 		boolean isLogined = false;
 		int loginedMemberId = 0;
+		Member loginedMember = null;
 
 		if (session.getAttribute("loginedMemberId") != null) {
 			isLogined = true;
@@ -51,6 +54,27 @@ public class Rq {
 		this.isLogined = isLogined;
 		this.loginedMemberId = loginedMemberId;
 		this.loginedMember = loginedMember;
+		
+		String requestUri = req.getRequestURI();
+		
+		// 해당 요청이 ajax 요청인지 아닌지 체크
+		boolean isAjax = requestUri.endsWith("Ajax");
+		
+		if (isAjax == false) {
+			if (paramMap.containsKey("ajax") && paramMap.get("ajax").equals("Y")) {
+				isAjax = true;
+			}
+			else if (paramMap.containsKey("isAjax") && paramMap.get("isAjax").equals("Y")) {
+				isAjax = true;
+			}
+		}
+		if (isAjax == false) {
+			if (requestUri.contains("/get")) {
+				isAjax = true;
+			}
+		}
+		
+		this.isAjax = isAjax;
 	}
 
 	public void printHistoryBackJs(String msg) {
@@ -129,23 +153,23 @@ public class Rq {
 	}
 	
 	public String getJoinUri() {	
-		return "../member/join?afterLogoutUri=" + getAfterLogoutUri();
+		return "/usr/member/join?afterLogoutUri=" + getAfterLogoutUri();
 	}
 
 	public String getLoginUri() {
-		return "../member/login?afterLoginUri=" + getAfterLoginUri();
+		return "/usr/member/login?afterLoginUri=" + getAfterLoginUri();
 	}
 
 	public String getLogoutUri() {	
-		return "../member/doLogout?afterLogoutUri=" + getAfterLogoutUri();
+		return "/usr/member/doLogout?afterLogoutUri=" + getAfterLogoutUri();
 	}
 	
 	public String getFindLoginIdUri() {	
-		return "../member/findLoginId?afterFindLoginIdUri=" + getAfterFindLoginIdUri();
+		return "/usr/member/findLoginId?afterFindLoginIdUri=" + getAfterFindLoginIdUri();
 	}
 	
 	public String getFindLoginPwUri() {	
-		return "../member/findLoginPw?afterFindLoginPwUri=" + getAfterFindLoginPwUri();
+		return "/usr/member/findLoginPw?afterFindLoginPwUri=" + getAfterFindLoginPwUri();
 	}
 	
 	public String getAfterFindLoginIdUri() {
@@ -203,5 +227,13 @@ public class Rq {
 	
 	public String getRemoveProfileImgIfNotExitOnErrorHtmlAttr() {
 		return "$(this).remove()";
+	}
+
+	public boolean isAdmin() {
+		if ( isLogined == false ) {
+			return false;
+		}
+		
+		return loginedMember.isAdmin();
 	}
 }
