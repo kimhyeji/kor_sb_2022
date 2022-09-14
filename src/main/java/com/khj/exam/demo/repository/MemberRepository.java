@@ -84,6 +84,7 @@ public interface MemberRepository {
 			SELECT COUNT(*) AS cnt
 			FROM `member` AS M
 			WHERE 1
+			AND delStatus = 0
 			<if test="authLevel != 0">
 				AND M.authLevel = #{authLevel}
 			</if>
@@ -118,6 +119,7 @@ public interface MemberRepository {
 				SELECT M.*
 				FROM `member` AS M
 				WHERE 1
+				AND delStatus = 0
 				<if test="authLevel != 0">
 					AND M.authLevel = #{authLevel}
 				</if>
@@ -151,4 +153,17 @@ public interface MemberRepository {
 			""")
 	List<Member> getForPrintMembers(int authLevel, String searchKeyword, String searchKeywordTypeCode, int limitStart,
 			int limitTake);
+
+	@Update("""
+			<script>
+			UPDATE `member`
+			<set>
+				updateDate = NOW(),
+				delStatus = 1,
+				delDate = NOW(),
+			</set>
+			WHERE id = #{id}
+			</script>
+			""")
+	void deleteMember(int id);
 }

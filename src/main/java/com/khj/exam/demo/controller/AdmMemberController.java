@@ -1,25 +1,18 @@
 package com.khj.exam.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
 
 import com.khj.exam.demo.service.GenFileService;
 import com.khj.exam.demo.service.MemberService;
 import com.khj.exam.demo.utill.Ut;
-import com.khj.exam.demo.vo.Article;
-import com.khj.exam.demo.vo.Board;
 import com.khj.exam.demo.vo.Member;
-import com.khj.exam.demo.vo.ResultData;
 import com.khj.exam.demo.vo.Rq;
 
 @Controller
@@ -46,12 +39,30 @@ public class AdmMemberController {
 				page);
 
 		model.addAttribute("authLevel",authLevel);
-		model.addAttribute("page", page);
+		model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
+		model.addAttribute("searchKeyword", searchKeyword);
+		
+		
 		model.addAttribute("pagesCount", pagesCount);
+		model.addAttribute("page", page);
 		
 		model.addAttribute("membersCount", membersCount);
 		model.addAttribute("members", members);
 
 		return "adm/member/list";
+	}
+	
+	@RequestMapping("/adm/member/doDeleteMembers")
+	@ResponseBody
+	public String doDelete(@RequestParam(defaultValue = "") String ids, @RequestParam(defaultValue = "/adm/member/list") String replaceUri) {
+		List<Integer> memberIds = new ArrayList<>();
+		
+		for ( String idStr : ids.split(",")) {
+			memberIds.add(Integer.parseInt(idStr));
+		}
+		
+		memberService.deleteMembers(memberIds);
+
+		return rq.jsReplace("해당 회원들이 삭제되었습니다.", replaceUri);
 	}
 }
